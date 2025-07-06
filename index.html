@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hitboxes Realistas</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #game {
+      position: relative;
+      aspect-ratio: 300 / 875;
+      height: 80vh;
+      max-height: 875px;
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOyfnlOV-JQi-pJThFg9DB-nG_WQs26nLxLN7Xabc5gJpFP_OsKOZ0YPNE&s=10');
+      background-size: cover;
+      background-position: center top;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .zona {
+      position: absolute;
+      border: none;
+      background-color: transparent;
+      pointer-events: auto;
+    }
+
+    #frase {
+      position: absolute;
+      background: white;
+      padding: 10px 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      font-family: sans-serif;
+      font-size: 14px;
+      display: none;
+      max-width: 250px;
+      text-align: center;
+      z-index: 999;
+      transform: translateX(-50%);
+    }
+
+    /* Hitboxes escaladas proporcionalmente */
+    #ojo-izq         { width: 16.67%; height: 3.43%; top: 27.43%; left: 30%; }
+    #ojo-der         { width: 16.67%; height: 3.43%; top: 26.29%; left: 66.67%; }
+    #nariz           { width: 6.67%;  height: 2.86%; top: 30.6%;  left: 55.59%; }
+    #boca            { width: 16.67%; height: 3.43%; top: 34.29%; left: 46.67%; }
+    #cabello         { width: 66.67%; height: 5.71%; top: 15.59%; left: 16.67%; }
+    #cachete-izq     { width: 8.33%;  height: 2.86%; top: 32.2%;  left: 30.83%; }
+    #cachete-der     { width: 8.33%;  height: 2.86%; top: 33.03%; left: 73.54%; }
+    #cuello          { width: 20%;    height: 4.57%; top: 39.31%; left: 37.11%; }
+    #brazo-izq       { width: 13.33%; height: 4.57%; top: 29.71%; left: 8.33%; }
+    #antebrazo-izq   { width: 11.67%; height: 12.57%;top: 51.23%; left: 8.36%; }
+    #antebrazo-der   { width: 11.67%; height: 12.57%;top: 50%;    left: 78.76%; }
+    #pecho           { width: 53.33%; height: 6.86%; top: 45%;    left: 22.48%; }
+    #estomago        { width: 50%;    height: 5.71%; top: 54.4%;  left: 26.68%; }
+    #pantorrilla-izq { width: 13.33%; height: 13.71%;top: 69.09%; left: 30.3%; }
+    #pantorrilla-der { width: 13.33%; height: 13.71%;top: 67.68%; left: 58.33%; }
+    #pie-izq         { width: 20%;    height: 3.43%; top: 82.67%; left: 25.3%; }
+    #pie-der         { width: 20%;    height: 3.43%; top: 82.83%; left: 57.71%; }
+  </style>
+</head>
+<body>
+
+<div id="game">
+  <div id="frase"></div>
+  <div id="ojo-izq" class="zona" title="Ojo Izquierdo"></div>
+  <div id="ojo-der" class="zona" title="Ojo Derecho"></div>
+  <div id="nariz" class="zona" title="Nariz"></div>
+  <div id="boca" class="zona" title="Boca"></div>
+  <div id="cabello" class="zona" title="Cabello"></div>
+  <div id="cachete-izq" class="zona" title="Cachete Izquierdo"></div>
+  <div id="cachete-der" class="zona" title="Cachete Derecho"></div>
+  <div id="cuello" class="zona" title="Cuello"></div>
+  <div id="brazo-izq" class="zona" title="Brazo Izquierdo"></div>
+  <div id="antebrazo-izq" class="zona" title="Antebrazo Izquierdo"></div>
+  <div id="antebrazo-der" class="zona" title="Antebrazo Derecho"></div>
+  <div id="pecho" class="zona" title="Pecho"></div>
+  <div id="estomago" class="zona" title="Estómago"></div>
+  <div id="pantorrilla-izq" class="zona" title="Pantorrilla Izquierda"></div>
+  <div id="pantorrilla-der" class="zona" title="Pantorrilla Derecha"></div>
+  <div id="pie-izq" class="zona" title="Pie Izquierdo"></div>
+  <div id="pie-der" class="zona" title="Pie Derecho"></div>
+</div>
+
+<script>
+const frases = {
+  "ojo izquierdo": ["¡Oye Mar! ¡Me vas a dejar ciego!", "¡Auch Mar!", "¡Eso fue directo al ojo!", "¡Mis pestañas son delicadas, Mar!", "¡¿Otra vez tú, Mar?!"],
+  "ojo derecho": ["¡No soy cámara de seguridad, Mar!", "¡Mi ojo derecho está viendo todo!", "¡Auch, cuidado Mar!", "¡Ya basta Mar!", "¡No me dejes bizco, Mar!"],
+  "nariz": ["¡Eso cosquillea, Mar!", "¡No es botón de timbre, Mar!", "¡Mi nariz no es juguete!", "¡ACHÚ Mar!", "¡Eso fue raro, Mar!"],
+  "boca": ["¡No metas el dedo ahí, Mar!", "¡Estaba hablando!", "¡Mis labios no son botones!", "¡Oye, respeta Mar!", "¡Eso no se hace Mar!"],
+  "cabello": ["¡Eh Mar! ¡Cuidado con mi peinado!", "¡No me despeines!", "¡Parezco escoba o qué, Mar!", "¡Mis rizos no son para jugar!", "¡Que alguien te enseñe modales, Mar!"],
+  "cachete izquierdo": ["¡Ay Mar! ¿Por qué me tocas la cara?", "¡Ese cachete es mío, Mar!", "¡Eso fue confianzudo, Mar!", "¡Mis mejillas no son de peluche!", "¡Stop, Mar!"],
+  "cachete derecho": ["¡Auch Mar!", "¡Eso fue un pellizco, Mar!", "¡Confianzudo Mar!", "¡Me dejaste roja!", "¡Ya párale Mar!"],
+  "cuello": ["¡Eso da cosquillas, Mar!", "¡Ahí no se toca!", "¡Vampiro detected, Mar!", "¡Uy, escalofrío Mar!", "¡Esa zona es sensible, Mar!"],
+  "brazo izquierdo": ["¡Soy fuerte pero tengo límites, Mar!", "¡No soy muñeco de trapo, Mar!", "¡Cuidado con mi oido","Eso fue brusco, Mar!", "¡Relájate, Mar!"],
+  "antebrazo izquierdo": ["¡Auch Mar!", "¡Esa zona es huesuda!", "¡Bájale dos rayitas, Mar!", "¡Eso dolió, Mar!", "¡No lo intentes de nuevo, Mar!"],
+  "antebrazo derecho": ["¡Hey Mar!", "¡Me estás desarmando!", "¡Oye, basta Mar!", "¡No soy articulación de robot!", "¡No más toques Mar!"],
+  "pecho": ["¡Con respeto, Mar, por favor!", "¡Eso fue inapropiado, Mar!", "¡No me toques ahí!", "¡Ya te vi, Mar!", "¡No es divertido, Mar!"],
+  "estómago": ["¡Tengo cosquillas ahí, Mar!", "¡Ay mi pancita!", "¡Eso fue raro!", "¡Qué haces tocando eso, Mar!", "¡Basta Mar!"],
+  "pantorrilla izquierda": ["¡Mis piernitas no, Mar!", "¡Auch Mar!", "¡Eso fue duro!", "¡No soy estatua!", "¡Deja mis músculos en paz, Mar!"],
+  "pantorrilla derecha": ["¡Ayayay Mar!", "¡Cuidado Mar!", "¡Eso dolió!", "¡Tocaste mi punto débil, Mar!", "¡Sin patadas Mar!"],
+  "pie izquierdo": ["¡Eso fue un cosquilleo raro, Mar!", "¡Tienes fetiches o qué, Mar!", "¡Ay! ¡Mi uña, Mar!", "¡No me toques los pies!", "¡Mis zapatos están ahí por algo, Mar!"],
+  "pie derecho": ["¡Eso me da risa, Mar!", "¡Los pies no Mar!", "¡Eso no se hace!", "¡Zas! Tocaste el suelo sagrado, Mar", "¡Voy a patearte, Mar!"]
+};
+
+const zonas = document.querySelectorAll('.zona');
+const fraseBox = document.getElementById('frase');
+
+zonas.forEach(zona => {
+  zona.addEventListener('click', () => {
+    const nombre = zona.title.toLowerCase();
+    const lista = frases[nombre];
+    if (!lista) return;
+    const random = lista[Math.floor(Math.random() * lista.length)];
+    fraseBox.innerText = random;
+    fraseBox.style.display = 'block';
+
+    const zonaRect = zona.getBoundingClientRect();
+    const gameRect = document.getElementById('game').getBoundingClientRect();
+    const relativeTop = zonaRect.top - gameRect.top - 40;
+    const relativeLeft = zonaRect.left - gameRect.left + (zonaRect.width / 2);
+    fraseBox.style.top = `${relativeTop}px`;
+    fraseBox.style.left = `${relativeLeft}px`;
+
+    clearTimeout(fraseBox.timer);
+    fraseBox.timer = setTimeout(() => {
+      fraseBox.style.display = 'none';
+    }, 2500);
+  });
+});
+</script>
+
+</body>
+</html>
