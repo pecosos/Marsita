@@ -9,9 +9,19 @@
       padding: 0;
       background: #f0f0f0;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      gap: 20px; /* espacio entre título y la imagen */
+    }
+
+    #titulo {
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: 3rem;
+      color: #222;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      user-select: none;
     }
 
     #game {
@@ -70,26 +80,28 @@
 </head>
 <body>
 
-<div id="game">
-  <div id="frase"></div>
-  <div id="ojo-izq" class="zona" title="Ojo Izquierdo"></div>
-  <div id="ojo-der" class="zona" title="Ojo Derecho"></div>
-  <div id="nariz" class="zona" title="Nariz"></div>
-  <div id="boca" class="zona" title="Boca"></div>
-  <div id="cabello" class="zona" title="Cabello"></div>
-  <div id="cachete-izq" class="zona" title="Cachete Izquierdo"></div>
-  <div id="cachete-der" class="zona" title="Cachete Derecho"></div>
-  <div id="cuello" class="zona" title="Cuello"></div>
-  <div id="brazo-izq" class="zona" title="Brazo Izquierdo"></div>
-  <div id="antebrazo-izq" class="zona" title="Antebrazo Izquierdo"></div>
-  <div id="antebrazo-der" class="zona" title="Antebrazo Derecho"></div>
-  <div id="pecho" class="zona" title="Pecho"></div>
-  <div id="estomago" class="zona" title="Estómago"></div>
-  <div id="pantorrilla-izq" class="zona" title="Pantorrilla Izquierda"></div>
-  <div id="pantorrilla-der" class="zona" title="Pantorrilla Derecha"></div>
-  <div id="pie-izq" class="zona" title="Pie Izquierdo"></div>
-  <div id="pie-der" class="zona" title="Pie Derecho"></div>
-</div>
+  <div id="titulo">Creado por abuelito</div>
+
+  <div id="game">
+    <div id="frase"></div>
+    <div id="ojo-izq" class="zona" title="Ojo Izquierdo"></div>
+    <div id="ojo-der" class="zona" title="Ojo Derecho"></div>
+    <div id="nariz" class="zona" title="Nariz"></div>
+    <div id="boca" class="zona" title="Boca"></div>
+    <div id="cabello" class="zona" title="Cabello"></div>
+    <div id="cachete-izq" class="zona" title="Cachete Izquierdo"></div>
+    <div id="cachete-der" class="zona" title="Cachete Derecho"></div>
+    <div id="cuello" class="zona" title="Cuello"></div>
+    <div id="brazo-izq" class="zona" title="Brazo Izquierdo"></div>
+    <div id="antebrazo-izq" class="zona" title="Antebrazo Izquierdo"></div>
+    <div id="antebrazo-der" class="zona" title="Antebrazo Derecho"></div>
+    <div id="pecho" class="zona" title="Pecho"></div>
+    <div id="estomago" class="zona" title="Estómago"></div>
+    <div id="pantorrilla-izq" class="zona" title="Pantorrilla Izquierda"></div>
+    <div id="pantorrilla-der" class="zona" title="Pantorrilla Derecha"></div>
+    <div id="pie-izq" class="zona" title="Pie Izquierdo"></div>
+    <div id="pie-der" class="zona" title="Pie Derecho"></div>
+  </div>
 
 <script>
 const frases = {
